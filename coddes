@@ -1,0 +1,73 @@
+import os
+import re
+import shutil
+import requests
+
+
+def setup_environment():
+    """Create directories for input and output if they don't exist."""
+    os.makedirs("data/input", exist_ok=True)
+    os.makedirs("data/output", exist_ok=True)
+    print("✅ Environment setup complete.\n")
+
+
+
+def download_sample_file():
+    """Download a sample text file (optional, just to show use of 'requests')."""
+    url = "https://www.w3.org/TR/PNG/iso_8859-1.txt" 
+    file_path = "data/input/sample.txt"
+
+    response = requests.get(url)
+    if response.status_code == 200:
+        with open(file_path, "wb") as file:
+            file.write(response.content)
+        print(f"📥 Sample file downloaded to: {file_path}")
+    else:
+        print("⚠️ Failed to download sample file.")
+    
+    return file_path
+
+
+
+def extract_emails(input_file, output_file):
+    """Extract all emails from the input file and save to output file."""
+    email_pattern = r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+
+    with open(input_file, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    emails = re.findall(email_pattern, content)
+
+    if emails:
+        with open(output_file, "w", encoding="utf-8") as f:
+            for email in emails:
+                f.write(email + "\n")
+        print(f"📧 {len(emails)} emails extracted and saved to {output_file}")
+    else:
+        print("❌ No email addresses found in the file.")
+
+
+
+def backup_output(output_file):
+    """Create a backup of the output file using shutil."""
+    backup_path = output_file.replace(".txt", "_backup.txt")
+    shutil.copy(output_file, backup_path)
+    print(f"🗂️ Backup created at: {backup_path}")
+
+
+
+def main():
+    setup_environment()
+
+    input_file = download_sample_file()
+
+    output_file = "data/output/extracted_emails.txt"
+
+    extract_emails(input_file, output_file)
+    backup_output(output_file)
+
+    print("\n🎯 Task completed successfully!")
+
+
+if __name__ == "__main__":
+    main()
