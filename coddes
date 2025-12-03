@@ -8,7 +8,7 @@ def setup_environment():
     """Create directories for input and output if they don't exist."""
     os.makedirs("data/input", exist_ok=True)
     os.makedirs("data/output", exist_ok=True)
-    print("✅ Environment setup complete.\n")
+    print("Environment setup complete.\n")
 
 
 
@@ -21,9 +21,9 @@ def download_sample_file():
     if response.status_code == 200:
         with open(file_path, "wb") as file:
             file.write(response.content)
-        print(f"📥 Sample file downloaded to: {file_path}")
+        print(f" Sample file downloaded to: {file_path}")
     else:
-        print("⚠️ Failed to download sample file.")
+        print(" Failed to download sample file.")
     
     return file_path
 
@@ -42,9 +42,9 @@ def extract_emails(input_file, output_file):
         with open(output_file, "w", encoding="utf-8") as f:
             for email in emails:
                 f.write(email + "\n")
-        print(f"📧 {len(emails)} emails extracted and saved to {output_file}")
+        print(f"{len(emails)} emails extracted and saved to {output_file}")
     else:
-        print("❌ No email addresses found in the file.")
+        print("No email addresses found in the file.")
 
 
 
@@ -52,7 +52,7 @@ def backup_output(output_file):
     """Create a backup of the output file using shutil."""
     backup_path = output_file.replace(".txt", "_backup.txt")
     shutil.copy(output_file, backup_path)
-    print(f"🗂️ Backup created at: {backup_path}")
+    print(f" Backup created at: {backup_path}")
 
 
 
@@ -66,7 +66,7 @@ def main():
     extract_emails(input_file, output_file)
     backup_output(output_file)
 
-    print("\n🎯 Task completed successfully!")
+    print("\n Task completed successfully!")
 
 
 if __name__ == "__main__":
